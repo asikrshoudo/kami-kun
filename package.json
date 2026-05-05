@@ -1,0 +1,51 @@
+{
+  "name": "nion-cli",
+  "version": "1.0.0",
+  "description": "The Universal AI CLI — One tool. Every model. Every platform.",
+  "type": "module",
+  "bin": {
+    "nion": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --outDir dist --clean",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist/"
+  ],
+  "dependencies": {
+    "@types/diff": "^7.0.2",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "diff": "^9.0.0",
+    "ora": "^8.0.1",
+    "smol-toml": "^1.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "ai",
+    "cli",
+    "openai",
+    "anthropic",
+    "claude",
+    "gemini",
+    "groq",
+    "llm"
+  ],
+  "author": "asikrshoudo",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asikrshoudo/nion-cli"
+  },
+  "homepage": "https://github.com/asikrshoudo/nion-cli",
+  "engines": {
+    "node": ">=18"
+  }
+}
