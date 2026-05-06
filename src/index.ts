@@ -1,19 +1,22 @@
 #!/usr/bin/env node
+import { createRequire } from 'module'
 import { buildCli } from './cli.js'
 import { checkForUpdates } from './updater.js'
 import { printUpdateAvailable } from './ui.js'
 import { shouldOnboard, runOnboarding } from './onboarding.js'
 
-const VERSION = process.env['NION_VERSION'] ?? '1.0.0'
+const require = createRequire(import.meta.url)
+const pkg = require('../package.json') as { version: string }
+const VERSION = pkg.version
 
 const args = process.argv.slice(2)
 const skipOnboarding = args.some(a =>
-  ['--help', '-h', '--version', '-V', 'config'].includes(a)
+  ['--help', '-h', '--version', '-V'].includes(a)
 )
 
 if (shouldOnboard() && !skipOnboarding) {
   await runOnboarding()
-  process.exit(0) // onboarding handles everything internally
+  process.exit(0)
 }
 
 const updateCheck = checkForUpdates(VERSION)
