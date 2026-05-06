@@ -6,13 +6,14 @@ import { shouldOnboard, runOnboarding } from './onboarding.js'
 
 const VERSION = process.env['NION_VERSION'] ?? '1.0.0'
 
-// First run — show onboarding
-const skipOnboarding = process.argv.slice(2).some(a =>
+const args = process.argv.slice(2)
+const skipOnboarding = args.some(a =>
   ['--help', '-h', '--version', '-V', 'config'].includes(a)
 )
 
 if (shouldOnboard() && !skipOnboarding) {
   await runOnboarding()
+  process.exit(0) // onboarding handles everything internally
 }
 
 const updateCheck = checkForUpdates(VERSION)
