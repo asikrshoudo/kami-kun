@@ -1,6 +1,7 @@
 import { Command } from 'commander'
 import * as clack from '@clack/prompts'
 import chalk from 'chalk'
+import { createRequire } from 'module'
 import { loadConfig } from './config.js'
 import { label } from './model-labels.js'
 import { runChat } from './commands/chat.js'
@@ -12,12 +13,8 @@ import { runTelegram } from './commands/telegram.js'
 import { runDonate } from './commands/donate.js'
 import { runConfigSetup, runConfigSetKey, runConfigShow } from './commands/config.js'
 
-const VERSION = (() => {
-  try {
-    const { createRequire } = await import('module') // handled at top level
-    return '1.0.0'
-  } catch { return '1.0.0' }
-})()
+const require = createRequire(import.meta.url)
+const { version: VERSION } = require('../package.json') as { version: string }
 
 export function buildCli(): Command {
   const program = new Command()
@@ -75,7 +72,6 @@ export function buildCli(): Command {
   config.command('set-key <provider> <key>').description('Set an API key').action(async (p, k) => { await runConfigSetKey(p, k) })
   config.command('show').description('Show current config').action(async () => { await runConfigShow() })
 
-  // Default: mode selector
   program.action(async () => {
     const cfg = loadConfig()
     const providerName = cfg.default_provider ?? 'groq'
@@ -91,9 +87,9 @@ export function buildCli(): Command {
     const mode = await clack.select({
       message: 'What do you want to do?',
       options: [
-        { value: 'agent', label: 'Agent',  hint: 'AI creates files, runs commands, searches web' },
-        { value: 'chat',  label: 'Chat',   hint: 'conversation, questions, explanations'          },
-        { value: 'ask',   label: 'Ask',    hint: 'quick one-shot question'                        },
+        { value: 'agent', label: 'Agent', hint: 'AI creates files, runs commands, searches web' },
+        { value: 'chat',  label: 'Chat',  hint: 'conversation, questions, explanations'         },
+        { value: 'ask',   label: 'Ask',   hint: 'quick one-shot question'                       },
       ],
     })
 
