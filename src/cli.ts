@@ -1,5 +1,8 @@
 import { Command } from 'commander'
-import { printLogo } from './ui.js'
+import * as clack from '@clack/prompts'
+import chalk from 'chalk'
+import { loadConfig } from './config.js'
+import { label } from './model-labels.js'
 import { runChat } from './commands/chat.js'
 import { runAgent } from './commands/agent.js'
 import { runAsk } from './commands/ask.js'
@@ -9,7 +12,12 @@ import { runTelegram } from './commands/telegram.js'
 import { runDonate } from './commands/donate.js'
 import { runConfigSetup, runConfigSetKey, runConfigShow } from './commands/config.js'
 
-const VERSION = process.env['NION_VERSION'] ?? '1.0.0'
+const VERSION = (() => {
+  try {
+    const { createRequire } = await import('module') // handled at top level
+    return '1.0.0'
+  } catch { return '1.0.0' }
+})()
 
 export function buildCli(): Command {
   const program = new Command()
@@ -21,13 +29,13 @@ export function buildCli(): Command {
   program
     .command('chat')
     .description('Interactive chat session')
-    .option('-p, --provider <id>', 'Provider (groq, anthropic, ollama...)')
-    .option('-m, --model <name>', 'Model name')
+    .option('-p, --provider <id>', 'Provider')
+    .option('-m, --model <name>', 'Model')
     .action(async (opts) => { await runChat(opts) })
 
   program
     .command('agent [task]')
-    .description('Agentic coding — AI reads, writes, searches, runs commands')
+    .description('Agentic coding — creates files, runs commands, searches web')
     .option('-p, --provider <id>', 'Provider')
     .option('-m, --model <name>', 'Model')
     .option('--mode <mode>', 'auto | suggest | manual  (default: suggest)')
@@ -67,6 +75,37 @@ export function buildCli(): Command {
   config.command('set-key <provider> <key>').description('Set an API key').action(async (p, k) => { await runConfigSetKey(p, k) })
   config.command('show').description('Show current config').action(async () => { await runConfigShow() })
 
-  program.action(() => { printLogo(); program.help() })
+  // Default: mode selector
+  program.action(async () => {
+    const cfg = loadConfig()
+    const providerName = cfg.default_provider ?? 'groq'
+    const modelName = label(cfg.default_model ?? '')
+
+    console.log()
+    console.log(
+      '  ' + chalk.bold.cyan('nion') +
+      chalk.dim(`  ·  ${providerName}  ·  ${modelName}`)
+    )
+    console.log()
+
+    const mode = await clack.select({
+      message: 'What do you want to do?',
+      options: [
+        { value: 'agent', label: 'Agent',  hint: 'AI creates files, runs commands, searches web' },
+        { value: 'chat',  label: 'Chat',   hint: 'conversation, questions, explanations'          },
+        { value: 'ask',   label: 'Ask',    hint: 'quick one-shot question'                        },
+      ],
+    })
+
+    if (clack.isCancel(mode)) { process.exit(0) }
+
+    if (mode === 'chat') await runChat({})
+    else if (mode === 'agent') await runAgent({})
+    else if (mode === 'ask') {
+      const prompt = await clack.text({ message: 'Your question' })
+      if (!clack.isCancel(prompt)) await runAsk(prompt as string, {})
+    }
+  })
+
   return program
 }
