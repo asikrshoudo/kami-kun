@@ -5,7 +5,7 @@ import { OllamaProvider } from './ollama.js'
 import {
   OpenAIProvider, GroqProvider, GrokProvider,
   DeepSeekProvider, MistralProvider, PerplexityProvider,
-  TogetherProvider, CohereProvider,
+  TogetherProvider, CohereProvider, OpenRouterProvider,
 } from './openai-compat.js'
 
 export const ALL_PROVIDERS: Provider[] = [
@@ -19,6 +19,7 @@ export const ALL_PROVIDERS: Provider[] = [
   new PerplexityProvider(),
   new TogetherProvider(),
   new CohereProvider(),
+  new OpenRouterProvider(),
   new OllamaProvider(),
 ]
 

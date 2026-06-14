@@ -92,3 +92,19 @@ export class CohereProvider extends OpenAICompatibleProvider {
   models = ['command-r-plus-08-2024', 'command-r-08-2024', 'command-light']
   protected getApiKey() { return loadConfig().api_keys['cohere'] ?? '' }
 }
+
+// ── OpenRouter ────────────────────────────────────────────────────────────────
+export class OpenRouterProvider extends OpenAICompatibleProvider {
+  id = 'openrouter'
+  name = 'OpenRouter'
+  baseUrl = 'https://openrouter.ai/api/v1'
+  defaultModel = 'meta-llama/llama-3.3-70b-instruct:free'
+  models = [
+    'meta-llama/llama-3.3-70b-instruct:free',
+    'deepseek/deepseek-chat:free',
+    'google/gemma-3-27b-it:free',
+    'mistralai/mistral-7b-instruct:free',
+    'qwen/qwen3-235b-a22b:free',
+  ]
+  protected getApiKey() { return loadConfig().api_keys['openrouter'] ?? '' }
+}
