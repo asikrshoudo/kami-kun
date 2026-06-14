@@ -27,16 +27,17 @@ function openBrowser(url: string): void {
 }
 
 const PROVIDER_LINKS: Record<string, string> = {
-  groq:       'https://console.groq.com',
-  google:     'https://aistudio.google.com',
-  anthropic:  'https://console.anthropic.com',
-  openai:     'https://platform.openai.com',
-  deepseek:   'https://platform.deepseek.com',
-  mistral:    'https://console.mistral.ai',
-  together:   'https://api.together.xyz',
-  grok:       'https://console.x.ai',
-  perplexity: 'https://www.perplexity.ai/settings/api',
-  cohere:     'https://dashboard.cohere.com',
+  groq:        'https://console.groq.com',
+  google:      'https://aistudio.google.com',
+  anthropic:   'https://console.anthropic.com',
+  openai:      'https://platform.openai.com',
+  deepseek:    'https://platform.deepseek.com',
+  mistral:     'https://console.mistral.ai',
+  together:    'https://api.together.xyz',
+  grok:        'https://console.x.ai',
+  perplexity:  'https://www.perplexity.ai/settings/api',
+  cohere:      'https://dashboard.cohere.com',
+  openrouter:  'https://openrouter.ai/keys',
 }
 
 export async function runOnboarding(): Promise<void> {
@@ -81,17 +82,18 @@ export async function runOnboarding(): Promise<void> {
   const providerId = await clack.select({
     message: 'Choose a provider',
     options: [
-      { value: 'groq',       label: 'Groq',        hint: 'free · fastest inference'        },
-      { value: 'google',     label: 'Gemini',       hint: 'free tier · capable'             },
-      { value: 'deepseek',   label: 'DeepSeek',     hint: 'free tier · strong at coding'   },
-      { value: 'anthropic',  label: 'Anthropic',    hint: 'paid · best at reasoning'        },
-      { value: 'openai',     label: 'OpenAI',       hint: 'paid · GPT-4o'                  },
-      { value: 'mistral',    label: 'Mistral',      hint: 'paid · great for code'           },
-      { value: 'together',   label: 'Together AI',  hint: 'free tier · many open models'   },
-      { value: 'grok',       label: 'xAI Grok',     hint: 'paid · Grok-2'                  },
-      { value: 'perplexity', label: 'Perplexity',   hint: 'paid · web search built-in'     },
-      { value: 'cohere',     label: 'Cohere',       hint: 'free tier · Command R+'         },
-      { value: 'ollama',     label: 'Ollama',       hint: 'local · no key · works offline' },
+      { value: 'groq',        label: 'Groq',        hint: 'free · fastest inference'        },
+      { value: 'google',      label: 'Gemini',       hint: 'free tier · capable'             },
+      { value: 'deepseek',    label: 'DeepSeek',     hint: 'free tier · strong at coding'   },
+      { value: 'openrouter',  label: 'OpenRouter',   hint: 'free models · many choices'     },
+      { value: 'anthropic',   label: 'Anthropic',    hint: 'paid · best at reasoning'        },
+      { value: 'openai',      label: 'OpenAI',       hint: 'paid · GPT-4o'                  },
+      { value: 'mistral',     label: 'Mistral',      hint: 'paid · great for code'           },
+      { value: 'together',    label: 'Together AI',  hint: 'free tier · many open models'   },
+      { value: 'grok',        label: 'xAI Grok',     hint: 'paid · Grok-2'                  },
+      { value: 'perplexity',  label: 'Perplexity',   hint: 'paid · web search built-in'     },
+      { value: 'cohere',      label: 'Cohere',       hint: 'free tier · Command R+'         },
+      { value: 'ollama',      label: 'Ollama',       hint: 'local · no key · works offline' },
     ],
   })
   if (clack.isCancel(providerId)) { clack.cancel('Setup cancelled.'); process.exit(0) }
