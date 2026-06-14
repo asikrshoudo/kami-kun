@@ -44,15 +44,14 @@ export async function runOnboarding(): Promise<void> {
   await sleep(100)
 
   console.log(chalk.cyan(`
-  ███╗   ██╗██╗ ██████╗ ███╗   ██╗
-  ████╗  ██║██║██╔═══██╗████╗  ██║
-  ██╔██╗ ██║██║██║   ██║██╔██╗ ██║
-  ██║╚██╗██║██║██║   ██║██║╚██╗██║
-  ██║ ╚████║██║╚██████╔╝██║ ╚████║
-  ╚═╝  ╚═══╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝`))
-  console.log()
+  ██╗  ██╗ █████╗ ███╗   ███╗██╗      ██╗  ██╗██╗   ██╗███╗   ██╗
+  ██║ ██╔╝██╔══██╗████╗ ████║██║      ██║ ██╔╝██║   ██║████╗  ██║
+  █████╔╝ ███████║██╔████╔██║██║█████╗█████╔╝ ██║   ██║██╔██╗ ██║
+  ██╔═██╗ ██╔══██║██║╚██╔╝██║██║╚════╝██╔═██╗ ██║   ██║██║╚██╗██║
+  ██║  ██╗██║  ██║██║ ╚═╝ ██║██║      ██║  ██╗╚██████╔╝██║ ╚████║
+  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝      ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝`))
+  console.log(chalk.dim('  the universal AI CLI\n'))
 
-  // Boot animation before clack
   const frames = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏']
   const steps = [
     { msg: 'Loading providers', duration: 500 },
@@ -70,9 +69,8 @@ export async function runOnboarding(): Promise<void> {
   console.log()
   await sleep(200)
 
-  clack.intro(chalk.bold.cyan('nion') + chalk.dim('  first run setup'))
+  clack.intro(chalk.bold.cyan('kami-kun') + chalk.dim('  first run setup'))
 
-  // Name
   const name = await clack.text({
     message: 'What should I call you?',
     placeholder: 'your name',
@@ -80,7 +78,6 @@ export async function runOnboarding(): Promise<void> {
   })
   if (clack.isCancel(name)) { clack.cancel('Setup cancelled.'); process.exit(0) }
 
-  // Provider
   const providerId = await clack.select({
     message: 'Choose a provider',
     options: [
@@ -103,7 +100,6 @@ export async function runOnboarding(): Promise<void> {
   const provider = ALL_PROVIDERS.find(p => p.id === pid)
   let chosenModel = provider?.defaultModel ?? ''
 
-  // Model selection with friendly names + default pre-selected
   if (provider && provider.models.length > 1) {
     const model = await clack.select({
       message: 'Choose a default model',
@@ -118,7 +114,6 @@ export async function runOnboarding(): Promise<void> {
     chosenModel = model as string
   }
 
-  // Agent mode
   const agentMode = await clack.select({
     message: 'Default agent approval mode',
     initialValue: 'suggest',
@@ -130,7 +125,6 @@ export async function runOnboarding(): Promise<void> {
   })
   if (clack.isCancel(agentMode)) { clack.cancel('Setup cancelled.'); process.exit(0) }
 
-  // API key flow
   let apiKey = ''
 
   if (pid !== 'ollama') {
@@ -168,7 +162,6 @@ export async function runOnboarding(): Promise<void> {
     }
   }
 
-  // Save
   const config = loadConfig()
   config.user_name = name as string
   config.default_provider = pid
@@ -180,7 +173,6 @@ export async function runOnboarding(): Promise<void> {
   clack.log.success('Configuration saved')
   console.log()
 
-  // Start now?
   const startNow = await clack.confirm({
     message: 'Start chatting now?',
     initialValue: true,
@@ -189,10 +181,12 @@ export async function runOnboarding(): Promise<void> {
   if (clack.isCancel(startNow) || !startNow) {
     clack.outro(
       chalk.bold.green(`All set, ${name as string}!`) +
-      chalk.dim('\n\n  ') + chalk.cyan('nion chat') +
+      chalk.dim('\n\n  ') + chalk.cyan('kami-kun chat') +
       chalk.dim('   — start a conversation') +
-      chalk.dim('\n  ') + chalk.cyan('nion agent') +
+      chalk.dim('\n  ') + chalk.cyan('kami-kun agent') +
       chalk.dim('  — let the agent code for you') +
+      chalk.dim('\n\n  ') + chalk.cyan('Discord →') +
+      chalk.dim(' https://www.thekami.tech/discord/') +
       '\n'
     )
     return

@@ -30,7 +30,7 @@ export class AnthropicProvider implements Provider {
     onChunk: (text: string) => void
   ): Promise<string> {
     const apiKey = this.getApiKey()
-    if (!apiKey) throw new Error('No API key for Anthropic. Run: nion config set-key anthropic <key>')
+    if (!apiKey) throw new Error('No API key for Anthropic. Run: kami-kun config set-key anthropic <key>')
 
     const { system, msgs } = this.buildMessages(messages)
 

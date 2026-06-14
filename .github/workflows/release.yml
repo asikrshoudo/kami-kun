@@ -32,21 +32,24 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: "nion ${{ github.ref_name }}"
+          name: "kami-kun ${{ github.ref_name }}"
           body: |
-            ## nion ${{ github.ref_name }}
+            ## kami-kun ${{ github.ref_name }}
 
             ### Install
             ```bash
-            npm install -g nion-cli
+            npm install -g kami-kun
             ```
 
             ### Quick start
             ```bash
-            nion config setup
-            nion chat
-            nion agent "your task here"
+            kami-kun config setup
+            kami-kun chat
+            kami-kun agent "your task here"
             ```
+
+            ### Discord
+            https://www.thekami.tech/discord/
           draft: false
           prerelease: false
         env:

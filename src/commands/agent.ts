@@ -8,8 +8,7 @@ import { scanProjectContext } from '../context.js'
 import {
   printError, printToolCall, printToolResult,
   printApprovalPrompt, waitForApproval, createSpinner,
-  printAssistantStart, printChunk, printAssistantEnd,
-  printSessionHeader,
+  printSessionHeader, renderMarkdown,
 } from '../ui.js'
 import type { Message, ToolCall } from '../types.js'
 
@@ -81,13 +80,14 @@ export async function runAgent(opts: {
 
   const systemPrompt = SYSTEM(context)
 
-  // One-shot task from CLI argument
   if (opts.task) {
-    console.log(
-      '\n  ' + chalk.bold.green('task') +
-      chalk.dim(' › ') +
-      chalk.white(opts.task) + '\n'
-    )
+    const W = Math.min(process.stdout.columns || 80, 88)
+    console.log()
+    console.log(chalk.dim('  ┌─ task ' + '─'.repeat(Math.max(0, W - 10)) + '┐'))
+    console.log(chalk.dim('  │') + '  ' + chalk.white(opts.task) + ' '.repeat(Math.max(0, W - opts.task.length - 6)) + chalk.dim('│'))
+    console.log(chalk.dim('  └' + '─'.repeat(W - 4) + '┘'))
+    console.log()
+
     const messages: Message[] = [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: opts.task },
@@ -101,8 +101,6 @@ export async function runAgent(opts: {
     return
   }
 
-  // Interactive mode
-  const W = Math.min(process.stdout.columns || 60, 80)
   console.log(chalk.dim('  Give me a task. /exit to quit.\n'))
 
   return new Promise<void>((resolve) => {
@@ -124,11 +122,12 @@ export async function runAgent(opts: {
         }
 
         if (line === '/help') {
-          console.log(chalk.dim('\n  Just type your task in plain English.'))
-          console.log(chalk.dim('  Examples:'))
+          console.log()
+          console.log(chalk.dim('  Just type your task in plain English. Examples:'))
           console.log(chalk.dim('    fix the bug in server.ts'))
           console.log(chalk.dim('    add user authentication to this Express app'))
-          console.log(chalk.dim('    why is npm install failing\n'))
+          console.log(chalk.dim('    why is npm install failing'))
+          console.log()
           prompt()
           return
         }
@@ -176,9 +175,10 @@ async function agentLoop(
   }
 
   if (response.content) {
-    printAssistantStart()
-    printChunk(response.content)
-    printAssistantEnd()
+    console.log()
+    console.log(chalk.bold.cyan('kami-kun') + chalk.dim(' › '))
+    console.log(renderMarkdown(response.content))
+    console.log()
   }
 
   if (!response.toolCalls?.length) return

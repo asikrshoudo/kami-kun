@@ -19,7 +19,7 @@ const { version: VERSION } = require('../package.json') as { version: string }
 export function buildCli(): Command {
   const program = new Command()
   program
-    .name('nion')
+    .name('kami-kun')
     .description('AI-powered CLI worker — give it a task, it gets it done')
     .version(VERSION)
     .argument('[task...]', 'Task to execute immediately')
@@ -41,7 +41,7 @@ export function buildCli(): Command {
 
       console.log()
       console.log(
-        '  ' + chalk.bold.cyan('nion') +
+        '  ' + chalk.bold.cyan('kami-kun') +
         chalk.dim(`  ·  ${providerName}  ·  ${modelName}`)
       )
       console.log()
@@ -100,7 +100,7 @@ export function buildCli(): Command {
 
   program
     .command('donate')
-    .description('Support nion development')
+    .description('Support kami-kun development')
     .action(() => { runDonate() })
 
   const config = program.command('config').description('Manage API keys and settings')

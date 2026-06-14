@@ -22,7 +22,7 @@ export class GoogleProvider implements Provider {
     onChunk: (text: string) => void
   ): Promise<string> {
     const apiKey = this.getApiKey()
-    if (!apiKey) throw new Error('No API key for Google. Run: nion config set-key google <key>')
+    if (!apiKey) throw new Error('No API key for Google. Run: kami-kun config set-key google <key>')
 
     const system = messages.find(m => m.role === 'system')?.content
     const contents = messages

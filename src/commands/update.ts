@@ -21,7 +21,7 @@ export async function runUpdate(): Promise<void> {
     console.log(`  Current: ${chalk.dim(CURRENT_VERSION)}`)
     console.log(`  Latest:  ${chalk.green(latest)}`)
     console.log()
-    printInfo('Run: ' + chalk.cyan('npm update -g nion-cli'))
+    printInfo('Run: ' + chalk.cyan('npm update -g kami-kun'))
     console.log()
   } catch (e: unknown) {
     spinner.stop()

@@ -23,5 +23,5 @@ export function runModels(): void {
 
   console.log()
   console.log(chalk.dim('  ● = key configured   ○ = no key   → = default model'))
-  console.log(chalk.dim('  Add keys: nion config set-key <provider> <key>\n'))
+  console.log(chalk.dim('  Add keys: kami-kun config set-key <provider> <key>\n'))
 }

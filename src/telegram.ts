@@ -145,7 +145,7 @@ export async function startBot(providerId: string, model?: string): Promise<void
   const config = loadConfig()
   const token = config.api_keys['telegram']
   if (!token) {
-    console.error('No Telegram bot token. Run: nion config set-key telegram <token>')
+    console.error('No Telegram bot token. Run: kami-kun config set-key telegram <token>')
     process.exit(1)
   }
 
@@ -179,7 +179,7 @@ export async function startBot(providerId: string, model?: string): Promise<void
 
         if (text.startsWith('/')) {
           if (text === '/start') {
-            await send(token, chatId, `👋 *nion* — Universal AI coding agent\n\nSend me a task or a screenshot and I will get it done.\n\nYour data stays on your machine.`)
+            await send(token, chatId, `👋 *kami-kun* — Universal AI coding agent\n\nSend me a task or a screenshot and I will get it done.\n\nYour data stays on your machine.`)
           } else if (text === '/help') {
             await send(token, chatId, `*How to use:*\n\nJust send a task:\n_"Fix the bug in auth.ts"_\n_"Add input validation to all routes"_\n\nOr send a screenshot with a description.\n\n\`/start\` — Welcome\n\`/help\` — This message`)
           }

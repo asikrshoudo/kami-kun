@@ -26,6 +26,6 @@ export { OllamaProvider }
 
 export function getProvider(id: string): Provider {
   const p = ALL_PROVIDERS.find(p => p.id === id)
-  if (!p) throw new Error(`Unknown provider: "${id}". Run "nion models" to see all.`)
+  if (!p) throw new Error(`Unknown provider: "${id}". Run "kami-kun models" to see all.`)
   return p
 }

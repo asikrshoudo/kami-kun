@@ -18,7 +18,7 @@ export function scanProjectContext(): string {
   }
 
   // Global memory
-  const globalMemory = `${process.env['HOME'] ?? '~'}/.nion/memory.md`
+  const globalMemory = `${process.env['HOME'] ?? '~'}/.kami-kun/memory.md`
   if (existsSync(globalMemory)) {
     const mem = readFileSync(globalMemory, 'utf-8')
     if (mem.trim()) parts.push(`## Global Memory\n${mem}\n`)

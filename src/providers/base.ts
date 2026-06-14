@@ -8,7 +8,6 @@ export abstract class OpenAICompatibleProvider implements Provider {
   abstract baseUrl: string
 
   protected getApiKey(): string {
-    // Overridden by subclasses that read from config
     return ''
   }
 
@@ -18,7 +17,7 @@ export abstract class OpenAICompatibleProvider implements Provider {
     onChunk: (text: string) => void
   ): Promise<string> {
     const apiKey = this.getApiKey()
-    if (!apiKey) throw new Error(`No API key for ${this.name}. Run: nion config set-key ${this.id} <key>`)
+    if (!apiKey) throw new Error(`No API key for ${this.name}. Run: kami-kun config set-key ${this.id} <key>`)
 
     const response = await fetch(`${this.baseUrl}/chat/completions`, {
       method: 'POST',
@@ -72,7 +71,7 @@ export abstract class OpenAICompatibleProvider implements Provider {
     tools: Tool[]
   ): Promise<ChatResponse> {
     const apiKey = this.getApiKey()
-    if (!apiKey) throw new Error(`No API key for ${this.name}.`)
+    if (!apiKey) throw new Error(`No API key for ${this.name}. Run: kami-kun config set-key ${this.id} <key>`)
 
     const openaiTools = tools.map(t => ({
       type: 'function',

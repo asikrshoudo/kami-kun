@@ -2,7 +2,7 @@ import * as readline from 'readline'
 import chalk from 'chalk'
 import { loadConfig } from '../config.js'
 import { getProvider } from '../providers/index.js'
-import { printError, printHelp } from '../ui.js'
+import { printError, printHelp, renderMarkdown } from '../ui.js'
 import { label } from '../model-labels.js'
 import type { Message } from '../types.js'
 
@@ -27,6 +27,27 @@ const CHAT_HELP = [
   { cmd: '/switch <id>',  desc: 'Switch provider'            },
 ]
 
+function printChatHeader(providerName: string, modelName: string): void {
+  const W = Math.min(process.stdout.columns || 80, 88)
+  console.log()
+  console.log(
+    '  ' + chalk.bold.cyan('kami-kun') +
+    chalk.dim('  chat') +
+    chalk.dim('  ·  ') +
+    chalk.white(providerName) +
+    chalk.dim('  /  ') +
+    chalk.white(modelName)
+  )
+  console.log('  ' + chalk.dim('─'.repeat(W - 4)))
+  console.log(
+    '  ' + chalk.dim('/help') + '  ' +
+    chalk.dim('/agent') + '  ' +
+    chalk.dim('/clear') + '  ' +
+    chalk.dim('/exit')
+  )
+  console.log()
+}
+
 export async function runChat(opts: { provider?: string; model?: string }): Promise<void> {
   clearFull()
 
@@ -37,22 +58,7 @@ export async function runChat(opts: { provider?: string; model?: string }): Prom
   let userName = config.user_name ?? 'you'
   const history: Message[] = []
 
-  console.log()
-  console.log(
-    '  ' + chalk.bold.cyan('nion') +
-    chalk.dim(' chat  ·  ') +
-    chalk.white(provider.name) +
-    chalk.dim('  ·  ') +
-    chalk.white(label(model))
-  )
-  console.log('  ' + chalk.dim('─'.repeat(50)))
-  console.log(
-    chalk.dim('  /help') + '  ' +
-    chalk.dim('/agent') + '  ' +
-    chalk.dim('/clear') + '  ' +
-    chalk.dim('/exit')
-  )
-  console.log()
+  printChatHeader(provider.name, label(model))
 
   return new Promise<void>((resolve) => {
     const rl = readline.createInterface({
@@ -87,16 +93,7 @@ export async function runChat(opts: { provider?: string; model?: string }): Prom
             case '/clear':
               history.length = 0
               clearFull()
-              console.log()
-              console.log(
-                '  ' + chalk.bold.cyan('nion') +
-                chalk.dim(' chat  ·  ') +
-                chalk.white(provider.name) +
-                chalk.dim('  ·  ') +
-                chalk.white(label(model))
-              )
-              console.log('  ' + chalk.dim('─'.repeat(50)))
-              console.log()
+              printChatHeader(provider.name, label(model))
               console.log(chalk.dim('  History cleared.'))
               break
 
@@ -134,31 +131,37 @@ export async function runChat(opts: { provider?: string; model?: string }): Prom
           return
         }
 
-        // Detect coding task
         if (looksLikeCodingTask(line)) {
           console.log()
           console.log(
             '  ' + chalk.yellow('⚡') +
-            chalk.dim(' This looks like a coding task.') +
-            ' ' + chalk.cyan('/agent') +
-            chalk.dim(' mode can actually create files and run commands.')
-          )
-          console.log(
-            chalk.dim('  Type ') + chalk.cyan('/agent') +
-            chalk.dim(' to switch, or just keep chatting.')
+            chalk.dim(' Looks like a coding task — ') +
+            chalk.cyan('/agent') +
+            chalk.dim(' can write files and run commands.')
           )
         }
 
         history.push({ role: 'user', content: line })
-        process.stdout.write(
-          '\n' + chalk.bold.cyan('nion') + chalk.dim(' › ')
-        )
 
+        console.log()
+        process.stdout.write(chalk.bold.cyan('kami-kun') + chalk.dim(' › '))
+
+        let fullReply = ''
         try {
           const reply = await provider.chat(history, model, (chunk) => {
+            fullReply += chunk
             process.stdout.write(chunk)
           })
-          process.stdout.write('\n')
+
+          const lineCount = fullReply.split('\n').length
+          if (fullReply.includes('```') || fullReply.includes('**') || fullReply.includes('`')) {
+            process.stdout.write(`\x1b[${lineCount}A\x1b[0J`)
+            process.stdout.write(chalk.bold.cyan('kami-kun') + chalk.dim(' › '))
+            console.log(renderMarkdown(fullReply))
+          } else {
+            process.stdout.write('\n')
+          }
+
           history.push({ role: 'assistant', content: reply })
         } catch (e: unknown) {
           process.stdout.write('\n')

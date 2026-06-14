@@ -4,7 +4,7 @@ import { homedir } from 'os'
 import { join } from 'path'
 import type { Config } from './types.js'
 
-const CONFIG_DIR = join(homedir(), '.nion')
+const CONFIG_DIR = join(homedir(), '.kami-kun')
 const CONFIG_FILE = join(CONFIG_DIR, 'config.toml')
 
 export function configExists(): boolean {

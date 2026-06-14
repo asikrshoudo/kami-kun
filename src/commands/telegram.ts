@@ -13,10 +13,10 @@ export async function runTelegram(opts: { provider?: string; model?: string }): 
     console.log()
     console.log('  1. Create a bot via ' + chalk.cyan('@BotFather') + ' on Telegram')
     console.log('  2. Copy the token')
-    console.log('  3. Run: ' + chalk.cyan('nion config set-key telegram <token>'))
+    console.log('  3. Run: ' + chalk.cyan('kami-kun config set-key telegram <token>'))
     console.log()
     console.log('  Optional — restrict to specific users:')
-    console.log('  ' + chalk.cyan('nion config set-key telegram_allowed username1,username2'))
+    console.log('  ' + chalk.cyan('kami-kun config set-key telegram_allowed username1,username2'))
     console.log()
     process.exit(1)
   }

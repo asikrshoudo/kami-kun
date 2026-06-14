@@ -1,10 +1,10 @@
 {
-  "name": "nion-cli",
-  "version": "1.0.7",
+  "name": "kami-kun",
+  "version": "1.0.8",
   "description": "The Universal AI CLI — One tool. Every model. Every platform.",
   "type": "module",
   "bin": {
-    "nion": "dist/index.js"
+    "kami-kun": "dist/index.js"
   },
   "scripts": {
     "build": "tsup src/index.ts --format esm --outDir dist --clean",
@@ -43,9 +43,9 @@
   "license": "AGPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/asikrshoudo/nion-cli"
+    "url": "https://github.com/asikrshoudo/kami-kun"
   },
-  "homepage": "https://github.com/asikrshoudo/nion-cli",
+  "homepage": "https://github.com/asikrshoudo/kami-kun",
   "engines": {
     "node": ">=18"
   }

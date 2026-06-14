@@ -22,7 +22,7 @@ export async function runConfigSetKey(provider: string, key: string): Promise<vo
 
 export async function runConfigShow(): Promise<void> {
   const config = loadConfig()
-  printHeader('nion config')
+  printHeader('kami-kun config')
   console.log(`  ${chalk.dim('file:')}             ${getConfigPath()}`)
   console.log(`  ${chalk.dim('default_provider:')} ${chalk.white(config.default_provider || chalk.red('not set'))}`)
   console.log(`  ${chalk.dim('default_model:')}    ${chalk.white(config.default_model || chalk.dim('none'))}`)

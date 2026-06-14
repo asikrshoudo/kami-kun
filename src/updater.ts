@@ -1,11 +1,11 @@
-const REPO = 'asikrshoudo/nion-cli'
+const REPO = 'asikrshoudo/kami-kun'
 
 export async function checkForUpdates(currentVersion: string): Promise<string | null> {
   try {
     const response = await fetch(
       `https://api.github.com/repos/${REPO}/releases/latest`,
       {
-        headers: { 'User-Agent': 'nion-cli' },
+        headers: { 'User-Agent': 'kami-kun' },
         signal: AbortSignal.timeout(4000),
       }
     )
