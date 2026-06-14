@@ -1,6 +1,6 @@
 {
   "name": "kami-kun",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "The Universal AI CLI — One tool. Every model. Every platform.",
   "type": "module",
   "bin": {
